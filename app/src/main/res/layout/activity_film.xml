@@ -81,7 +81,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/getStarted"
+        android:id="@+id/buy_ticket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

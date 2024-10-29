@@ -1,9 +1,12 @@
 package com.example.film;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ public class FilmActivity extends AppCompatActivity {
 
     private ImageView filmImage;
     private TextView description, country, genre, director, actor, duration, release;
+    private Button buyTicket;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -42,6 +46,7 @@ public class FilmActivity extends AppCompatActivity {
         actor = findViewById(R.id.actor);
         duration = findViewById(R.id.duration);
         release = findViewById(R.id.release_date);
+        buyTicket = findViewById(R.id.buy_ticket);
         int id = getIntent().getIntExtra("id", -1);
         if (id == -1) {
             Toast.makeText(getApplicationContext(), "PHIM KHÔNG HỢP LỆ", Toast.LENGTH_LONG).show();
@@ -58,6 +63,13 @@ public class FilmActivity extends AppCompatActivity {
         actor.setText("\u2022 Diễn viên: " + movie.getActor());
         duration.setText("\u2022 Thời lượng: " + movie.getDuration() + " phút");
         release.setText("\u2022 Ngày phát hành: " + movie.getReleaseDate() + "");
-
+        buyTicket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FilmActivity.this, TicketActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
     }
 }
