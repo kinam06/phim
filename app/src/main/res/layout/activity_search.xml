@@ -12,6 +12,7 @@
         android:id="@+id/textField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
         android:paddingHorizontal="16dp"
         android:textColorHint="@color/red"
         app:endIconDrawable="@drawable/baseline_search"
@@ -23,9 +24,16 @@
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/red"
             android:imeOptions="actionDone"
+            android:textColor="@color/red"
             android:textColorHint="@color/red" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </LinearLayout>

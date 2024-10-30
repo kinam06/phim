@@ -4,15 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.film.database.ItemClickListener;
-import com.example.film.database.Movie;
 import com.example.film.database.Movie;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
@@ -20,13 +17,13 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderAdapterMovie extends SliderViewAdapter<SliderAdapterMovie.SliderAdapterVH> {
+public class SliderMovieAdapter extends SliderViewAdapter<SliderMovieAdapter.SliderAdapterVH> {
 
     private Context context;
     private ItemClickListener listener;
     private List<Movie> movies = new ArrayList<>();
 
-    public SliderAdapterMovie(Context context, ItemClickListener listener) {
+    public SliderMovieAdapter(Context context, ItemClickListener listener) {
         this.context = context;
         this.listener = listener;
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -56,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             );
             String pathRom = createFileFromAssets("rom.png");
             Movie rom = new Movie(
-                    "MẮT BIẾC",
+                    "RÒM",
                     pathRom,
                     "Bộ phim lấy bối cảnh một khu chung cư cũ kỹ của người lao động nghèo Sài Gòn, xoay quanh câu chuyện số đề, một loại hình cá cược phi pháp dựa trên kết quả xổ số kiến thiết của nhà nước. Người chơi sẽ cố gắng dự đoán 2 con số cuối giải đặc biệt kết quả xổ số mỗi ngày vào buổi chiều muộn. Ròm và đám trẻ bụi đời kiếm sống bằng nghề bán vé dò xổ số kiêm luôn nghề “cò” ghi số đề. Chúng sống nhờ tình thương của những người thắng đề khi đoán đúng, rồi bị mắng mỏ thậm chí còn bị đánh đập nếu kết quả dự đoán sai.",
                     "Việt Nam",
@@ -77,6 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private long insertMovie(SQLiteDatabase db, Movie movie) {
         ContentValues values = new ContentValues();
         values.put(Movie.NAME, movie.getName());
+        values.put(Movie.NAME_ENG, movie.getNameEng());
         values.put(Movie.IMAGE, movie.getImage());
         values.put(Movie.DESCRIPTION, movie.getDescription());
         values.put(Movie.COUNTRY, movie.getCountry());
@@ -177,6 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
         values.put(Movie.NAME, movie.getName());
+        values.put(Movie.NAME_ENG, movie.getNameEng());
         values.put(Movie.IMAGE, movie.getImage());
         values.put(Movie.DESCRIPTION, movie.getDescription());
         values.put(Movie.COUNTRY, movie.getCountry());
@@ -197,16 +200,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Movie getMovie(int id) {
-        if (id == -1){
+        if (id == -1) {
             return null;
         }
-            // get readable database as we are not inserting anything
+        // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Movie.TABLE_NAME,
                 new String[]{
                         Movie.MOVIE_ID,
                         Movie.NAME,
+                        Movie.NAME_ENG,
                         Movie.IMAGE,
                         Movie.DESCRIPTION,
                         Movie.COUNTRY,
@@ -246,6 +250,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return movie;
     }
 
+    public List<Movie> getMovieByName(String name) {
+        List<Movie> movies = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Movie.TABLE_NAME,
+                new String[]{
+                        Movie.MOVIE_ID,
+                        Movie.NAME,
+                        Movie.NAME_ENG,
+                        Movie.IMAGE,
+                        Movie.DESCRIPTION,
+                        Movie.COUNTRY,
+                        Movie.GENRE,
+                        Movie.DIRECTOR,
+                        Movie.ACTOR,
+                        Movie.DURATION,
+                        Movie.RELEASE,
+                },
+                Movie.NAME_ENG + " like ?",
+                new String[]{"%" + name + "%"}, null, null, null, String.valueOf(5));
+
+        if (cursor == null || cursor.getCount() == 0) {
+            return movies;
+        }
+
+        cursor.moveToFirst();
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range")
+                Movie movie = new Movie(
+                        cursor.getInt(cursor.getColumnIndex(Movie.MOVIE_ID)),
+                        cursor.getString(cursor.getColumnIndex(Movie.NAME)),
+                        cursor.getString(cursor.getColumnIndex(Movie.IMAGE)),
+                        cursor.getString(cursor.getColumnIndex(Movie.DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(Movie.COUNTRY)),
+                        cursor.getString(cursor.getColumnIndex(Movie.GENRE)),
+                        cursor.getString(cursor.getColumnIndex(Movie.DIRECTOR)),
+                        cursor.getString(cursor.getColumnIndex(Movie.ACTOR)),
+                        cursor.getInt(cursor.getColumnIndex(Movie.DURATION)),
+                        cursor.getString(cursor.getColumnIndex(Movie.RELEASE))
+                );
+                movies.add(movie);
+            } while (cursor.moveToNext());
+        }
+
+        // close the db connection
+        cursor.close();
+
+        return movies;
+    }
+
     public List<Movie> getRandomMovies() {
         List<Movie> movies = new ArrayList<>();
         // get readable database as we are not inserting anything
@@ -255,6 +311,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{
                         Movie.MOVIE_ID,
                         Movie.NAME,
+                        Movie.NAME_ENG,
                         Movie.IMAGE,
                         Movie.DESCRIPTION,
                         Movie.COUNTRY,
@@ -268,7 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null, null, null, "RANDOM()", String.valueOf(5));
 
         if (cursor == null || cursor.getCount() == 0) {
-            return null;
+            return movies;
         }
 
         cursor.moveToFirst();
@@ -306,6 +363,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{
                         Movie.MOVIE_ID,
                         Movie.NAME,
+                        Movie.NAME_ENG,
                         Movie.IMAGE,
                         Movie.DESCRIPTION,
                         Movie.COUNTRY,
@@ -319,7 +377,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null, null, null, null, String.valueOf(5));
 
         if (cursor == null || cursor.getCount() == 0) {
-            return null;
+            return movies;
         }
 
         cursor.moveToFirst();

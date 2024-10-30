@@ -1,9 +1,12 @@
 package com.example.film.database;
 
+import com.example.film.utils.StringUtil;
+
 public class Movie {
 
     private Integer id;
     private String name;
+    private String nameEng;
     private String image;
     private String description;
     private String country;
@@ -16,6 +19,7 @@ public class Movie {
     public static final String TABLE_NAME = "movies";
     public static final String MOVIE_ID = "id";
     public static final String NAME = "name";
+    public static final String NAME_ENG = "name_eng";
     public static final String IMAGE = "image";
     public static final String DESCRIPTION = "description";
     public static final String COUNTRY = "country";
@@ -28,6 +32,7 @@ public class Movie {
             + TABLE_NAME + "("
             + MOVIE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + NAME + " TEXT,"
+            + NAME_ENG + " TEXT,"
             + IMAGE + " TEXT,"
             + DESCRIPTION + " TEXT,"
             + COUNTRY + " TEXT,"
@@ -40,6 +45,7 @@ public class Movie {
 
     public Movie(String name, String image, String description, String country, String genre, String director, String actor, int duration, String releaseDate) {
         this.name = name;
+        this.nameEng = StringUtil.removeAccent(name);
         this.image = image;
         this.description = description;
         this.country = country;
@@ -53,6 +59,7 @@ public class Movie {
     public Movie(Integer id, String name, String image, String description, String country, String genre, String director, String actor, int duration, String releaseDate) {
         this.id = id;
         this.name = name;
+        this.nameEng = StringUtil.removeAccent(name);
         this.image = image;
         this.description = description;
         this.country = country;
@@ -61,6 +68,31 @@ public class Movie {
         this.actor = actor;
         this.duration = duration;
         this.releaseDate = releaseDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nameEng='" + nameEng + '\'' +
+                ", image='" + image + '\'' +
+                ", description='" + description + '\'' +
+                ", country='" + country + '\'' +
+                ", genre='" + genre + '\'' +
+                ", director='" + director + '\'' +
+                ", actor='" + actor + '\'' +
+                ", duration=" + duration +
+                ", releaseDate='" + releaseDate + '\'' +
+                '}';
+    }
+
+    public String getNameEng() {
+        return nameEng;
+    }
+
+    public void setNameEng(String nameEng) {
+        this.nameEng = nameEng;
     }
 
     public String getImage() {

@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         SliderView sliderViewTop = findViewById(R.id.imageSliderTopMovies);
         SliderView sliderViewUpcoming = findViewById(R.id.imageSliderUpcoming);
 
-        SliderAdapterMovie adapterRandom = new SliderAdapterMovie(this, itemClickListener);
-        SliderAdapterMovie adapterTop = new SliderAdapterMovie(this, itemClickListener);
-        SliderAdapterMovie adapterUpcoming = new SliderAdapterMovie(this, itemClickListener);
+        SliderMovieAdapter adapterRandom = new SliderMovieAdapter(this, itemClickListener);
+        SliderMovieAdapter adapterTop = new SliderMovieAdapter(this, itemClickListener);
+        SliderMovieAdapter adapterUpcoming = new SliderMovieAdapter(this, itemClickListener);
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         adapterRandom.renewItems(databaseHelper.getRandomMovies());
         adapterTop.renewItems(databaseHelper.getTopMovie());
