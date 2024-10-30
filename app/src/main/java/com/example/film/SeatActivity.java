@@ -162,6 +162,22 @@ public class SeatActivity extends AppCompatActivity {
             reservation.setTime(time);
             databaseHelper.insertOrUpdateReservation(reservation);
             Toast.makeText(getApplicationContext(), "THÀNH CÔNG", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(SeatActivity.this, ViewTicketActivity.class);
+            intent.putExtra("id", id);
+            intent.putExtra("date", DateUtilities.dateToString(date));
+            intent.putExtra("time", time);
+            StringBuilder seat = new StringBuilder();
+            List<Integer> selectedSeat = seatAdapter.getSelectedSeats();
+            for (int i = 0; i < selectedSeat.size(); i++) {
+                if (i == selectedSeat.size() - 1) {
+                    seat.append(selectedSeat.get(i) + 1);
+                } else {
+                    seat.append(selectedSeat.get(i) + 1).append(", ");
+                }
+            }
+            intent.putExtra("seats", seat.toString());
+            intent.putExtra("total", totalValue);
+            startActivity(intent);
             finish();
         }
     }

@@ -20,7 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.film.database.DatabaseHelper;
 import com.example.film.database.Movie;
 
-public class FilmActivity extends AppCompatActivity {
+public class MovieActivity extends AppCompatActivity {
 
     private ImageView filmImage;
     private TextView description, country, genre, director, actor, duration, release;
@@ -31,14 +31,14 @@ public class FilmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_film);
+        setContentView(R.layout.activity_movie);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        filmImage = findViewById(R.id.film_image);
-        description = findViewById(R.id.firm_description);
+        filmImage = findViewById(R.id.movie_image);
+        description = findViewById(R.id.movie_description);
         country = findViewById(R.id.country);
         genre = findViewById(R.id.genre);
         director = findViewById(R.id.director);
@@ -65,7 +65,7 @@ public class FilmActivity extends AppCompatActivity {
         buyTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FilmActivity.this, SeatActivity.class);
+                Intent intent = new Intent(MovieActivity.this, SeatActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }

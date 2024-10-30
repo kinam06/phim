@@ -9,6 +9,7 @@ public class Reservation {
     public static final String TABLE_NAME = "reservation";
     public static final String RESERVATION_ID = "id";
     public static final String MOVIE_ID = "movie_id";
+    public static final String USER_ID = "user_id";
     public static final String DATE = "date";
     public static final String TIME = "time";
     public static final String SEAT = "seat";
@@ -16,12 +17,14 @@ public class Reservation {
             + TABLE_NAME + "("
             + RESERVATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + MOVIE_ID + " INTEGER,"
+            + USER_ID + " INTEGER,"
             + DATE + " TEXT,"
             + TIME + " TEXT,"
             + SEAT + " TEXT"
             + ")";
     private Integer id;
     private Integer movieId;
+    private Integer userId;
     private String date;
     private String time;
     private List<Integer> seat;
@@ -29,7 +32,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer id, Integer movieId, String date, String time, List<Integer> seat) {
+    public Reservation(Integer id, Integer movieId, Integer userId, String date, String time, List<Integer> seat) {
         this.id = id;
         this.movieId = movieId;
         this.date = date;
@@ -37,11 +40,19 @@ public class Reservation {
         this.seat = seat;
     }
 
-    public Reservation(Integer movieId, String date, String time, List<Integer> seat) {
+    public Reservation(Integer movieId, Integer userId, String date, String time, List<Integer> seat) {
         this.movieId = movieId;
         this.date = date;
         this.time = time;
         this.seat = seat;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getId() {

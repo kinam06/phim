@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new SearchAdapter(this, new MovieClickListener() {
             @Override
             public void onMovieClick(Movie movie) {
-                Intent intent = new Intent(SearchActivity.this, FilmActivity.class);
+                Intent intent = new Intent(SearchActivity.this, MovieActivity.class);
                 intent.putExtra("id", movie.getId());
                 startActivity(intent);
             }

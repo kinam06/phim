@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private final ItemClickListener itemClickListener = new ItemClickListener() {
         @Override
         public void onMovieClick(Movie movie) {
-            Intent intent = new Intent(MainActivity.this, FilmActivity.class);
+            Intent intent = new Intent(MainActivity.this, MovieActivity.class);
             intent.putExtra("id", movie.getId());
             startActivity(intent);
         }

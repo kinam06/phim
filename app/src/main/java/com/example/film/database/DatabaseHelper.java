@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -156,7 +155,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
 
-        // prepare note object
         @SuppressLint("Range")
         User user = new User(
                 cursor.getInt(cursor.getColumnIndex(User.USER_ID)),
@@ -169,6 +167,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return user;
+    }
+
+    public List<User> getAllUser() {
+        // get readable database as we are not inserting anything
+        List<User> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(User.TABLE_NAME,
+                new String[]{User.USER_ID, User.USERNAME, User.PASSWORD, User.CREATE_TIME},
+                null, null, null, null, null, null);
+
+        if (cursor == null || cursor.getCount() == 0) {
+            return list;
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range")
+                User user = new User(
+                        cursor.getInt(cursor.getColumnIndex(User.USER_ID)),
+                        cursor.getString(cursor.getColumnIndex(User.USERNAME)),
+                        cursor.getString(cursor.getColumnIndex(User.PASSWORD)),
+                        cursor.getString(cursor.getColumnIndex(User.CREATE_TIME))
+                );
+                list.add(user);
+            } while (cursor.moveToNext());
+        }
+        // close the db connection
+        cursor.close();
+
+        return list;
     }
 
     public long insertMovie(Movie movie) {
@@ -229,7 +258,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
 
-        // prepare note object
         @SuppressLint("Range")
         Movie movie = new Movie(
                 cursor.getInt(cursor.getColumnIndex(Movie.MOVIE_ID)),
@@ -248,6 +276,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return movie;
+    }
+
+    public void deleteMovie(long id) {
+        if (id < 0) {
+            return;
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(Movie.TABLE_NAME, Movie.MOVIE_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public List<Movie> getMovieByName(String name) {
@@ -302,6 +338,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return movies;
     }
 
+    public List<Movie> getAllMovies() {
+        List<Movie> movies = new ArrayList<>();
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Movie.TABLE_NAME,
+                new String[]{
+                        Movie.MOVIE_ID,
+                        Movie.NAME,
+                        Movie.NAME_ENG,
+                        Movie.IMAGE,
+                        Movie.DESCRIPTION,
+                        Movie.COUNTRY,
+                        Movie.GENRE,
+                        Movie.DIRECTOR,
+                        Movie.ACTOR,
+                        Movie.DURATION,
+                        Movie.RELEASE,
+                },
+                null,
+                null, null, null, null, null);
+
+        if (cursor == null || cursor.getCount() == 0) {
+            return movies;
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range")
+                Movie movie = new Movie(
+                        cursor.getInt(cursor.getColumnIndex(Movie.MOVIE_ID)),
+                        cursor.getString(cursor.getColumnIndex(Movie.NAME)),
+                        cursor.getString(cursor.getColumnIndex(Movie.IMAGE)),
+                        cursor.getString(cursor.getColumnIndex(Movie.DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(Movie.COUNTRY)),
+                        cursor.getString(cursor.getColumnIndex(Movie.GENRE)),
+                        cursor.getString(cursor.getColumnIndex(Movie.DIRECTOR)),
+                        cursor.getString(cursor.getColumnIndex(Movie.ACTOR)),
+                        cursor.getInt(cursor.getColumnIndex(Movie.DURATION)),
+                        cursor.getString(cursor.getColumnIndex(Movie.RELEASE))
+                );
+                movies.add(movie);
+            } while (cursor.moveToNext());
+        }
+
+        // close the db connection
+        cursor.close();
+
+        return movies;
+    }
+
     public List<Movie> getRandomMovies() {
         List<Movie> movies = new ArrayList<>();
         // get readable database as we are not inserting anything
@@ -328,7 +415,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return movies;
         }
 
-        cursor.moveToFirst();
         if (cursor.moveToFirst()) {
             do {
                 @SuppressLint("Range")
@@ -413,6 +499,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (dbReservation == null) {
 
             values.put(Reservation.MOVIE_ID, reservation.getMovieId());
+            values.put(Reservation.USER_ID, reservation.getUserId());
             values.put(Reservation.DATE, reservation.getDate());
             values.put(Reservation.TIME, reservation.getTime());
             values.put(Reservation.SEAT, gson.toJson(reservation.getSeat()));
@@ -428,6 +515,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             values.put(Reservation.RESERVATION_ID, dbReservation.getId());
             values.put(Reservation.MOVIE_ID, dbReservation.getMovieId());
+            values.put(Reservation.USER_ID, dbReservation.getUserId());
             values.put(Reservation.DATE, dbReservation.getDate());
             values.put(Reservation.TIME, dbReservation.getTime());
             dbReservation.getSeat().addAll(reservation.getSeat());
@@ -453,6 +541,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{
                         Reservation.RESERVATION_ID,
                         Reservation.MOVIE_ID,
+                        Reservation.USER_ID,
                         Reservation.DATE,
                         Reservation.TIME,
                         Reservation.SEAT
@@ -474,6 +563,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Reservation reservation = new Reservation(
                 cursor.getInt(cursor.getColumnIndex(Reservation.RESERVATION_ID)),
                 cursor.getInt(cursor.getColumnIndex(Reservation.MOVIE_ID)),
+                cursor.getInt(cursor.getColumnIndex(Reservation.USER_ID)),
                 cursor.getString(cursor.getColumnIndex(Reservation.DATE)),
                 cursor.getString(cursor.getColumnIndex(Reservation.TIME)),
                 seats
