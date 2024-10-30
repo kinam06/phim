@@ -1,5 +1,9 @@
 package com.example.film.database;
 
+import com.example.film.utils.DateUtilities;
+
+import java.util.Date;
+
 public class User {
 
     public static final String TABLE_NAME = "users";
@@ -9,34 +13,35 @@ public class User {
     public static final String CREATE_TIME = "create_time";
 
     // Create table SQL query
-    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USERNAME + " TEXT," + PASSWORD + " TEXT," + CREATE_TIME + " INTEGER" + ")";
+    public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + USERNAME + " TEXT," + PASSWORD + " TEXT," + CREATE_TIME + " TEXT" + ")";
 
     private Integer id = null;
     private String username;
     private String password;
-    private Long timestamp = System.currentTimeMillis();
+    private String time ;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        time = DateUtilities.dateToString(new Date());
     }
 
-    public User(Integer id, String username, String password, Long timestamp) {
+    public User(Integer id, String username, String password, String time) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.timestamp = timestamp;
+        this.time = time;
     }
 
     public User() {
     }
 
-    public Long getTimestamp() {
-        return timestamp;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(String timestamp) {
+        this.time = timestamp;
     }
 
     public Integer getId() {

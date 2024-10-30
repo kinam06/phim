@@ -112,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
 
-    public long insertMovie(User user) {
+    public long insertUser(User user) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -121,6 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // no need to add them
         values.put(User.USERNAME, user.getUsername());
         values.put(User.PASSWORD, user.getPassword());
+        values.put(User.CREATE_TIME, user.getTime());
 
         // insert row
         long id = db.insert(User.TABLE_NAME, null, values);
@@ -153,7 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getInt(cursor.getColumnIndex(User.USER_ID)),
                 cursor.getString(cursor.getColumnIndex(User.USERNAME)),
                 cursor.getString(cursor.getColumnIndex(User.PASSWORD)),
-                cursor.getLong(cursor.getColumnIndex(User.CREATE_TIME))
+                cursor.getString(cursor.getColumnIndex(User.CREATE_TIME))
         );
 
         // close the db connection

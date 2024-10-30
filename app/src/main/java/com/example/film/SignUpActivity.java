@@ -57,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "TÊN ĐĂNG NHẬP ĐÃ TỒN TẠI!", Toast.LENGTH_LONG).show();
             }
             User user = new User(username, password);
-            databaseHelper.insertMovie(user);
+            databaseHelper.insertUser(user);
             Toast.makeText(getApplicationContext(), "ĐĂNG KÝ THÀNH CÔNG!", Toast.LENGTH_LONG).show();
             finish();
         } catch (Exception e) {
