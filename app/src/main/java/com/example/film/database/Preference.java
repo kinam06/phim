@@ -41,13 +41,12 @@ public class Preference {
         return gson.fromJson(userString, User.class);
     }
 
-    public void setLoginUser(Context context, long id) {
+    public static void setLoginUser(Context context, long id) {
         getSharePreferences(context).edit()
                 .putLong("login", id).apply();
     }
 
-    public void setLoginUser(Context context, int id) {
-        getSharePreferences(context).edit()
-                .putInt("login", id).apply();
+    public static int getLoginUser(Context context) {
+        return (int) getSharePreferences(context).getLong("login", -1);
     }
 }

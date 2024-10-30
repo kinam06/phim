@@ -38,11 +38,13 @@ public class Reservation {
         this.date = date;
         this.time = time;
         this.seat = seat;
+        this.userId = userId;
     }
 
     public Reservation(Integer movieId, Integer userId, String date, String time, List<Integer> seat) {
         this.movieId = movieId;
         this.date = date;
+        this.userId = userId;
         this.time = time;
         this.seat = seat;
     }

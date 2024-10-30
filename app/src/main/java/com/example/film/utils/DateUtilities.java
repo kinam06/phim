@@ -15,5 +15,4 @@ public class DateUtilities {
     public static Date createDate(int day, int month, int year) {
         return new GregorianCalendar(year, month - 1, day).getTime();
     }
-
 }

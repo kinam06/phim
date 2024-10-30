@@ -1,6 +1,9 @@
 package com.example.film.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +22,7 @@ public class ManageUserActivity extends AppCompatActivity {
     private RecyclerView userRecyclerView;
     private UserAdapter userAdapter;
     private DatabaseHelper databaseHelper;
+    private Button addUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,19 @@ public class ManageUserActivity extends AppCompatActivity {
         userRecyclerView = findViewById(R.id.userRecyclerView);
         userRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         userRecyclerView.setAdapter(userAdapter);
+        userAdapter.renewItems(databaseHelper.getAllUser());
+        addUser = findViewById(R.id.addUser);
+        addUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ManageUserActivity.this, AddUserActivity.class));
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         userAdapter.renewItems(databaseHelper.getAllUser());
     }
 }

@@ -39,7 +39,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SeatAdapte
     @NonNull
     @Override
     public SeatAdapterVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null);
+        View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search, null);
         return new SeatAdapterVH(inflate);
     }
 

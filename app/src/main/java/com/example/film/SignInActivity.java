@@ -87,6 +87,7 @@ public class SignInActivity extends AppCompatActivity {
             } else {
                 Preference.clearUser(getApplicationContext());
             }
+            Preference.setLoginUser(getApplicationContext(), user.getId());
             startActivity(
                     new Intent(SignInActivity.this, MainActivity.class)
             );

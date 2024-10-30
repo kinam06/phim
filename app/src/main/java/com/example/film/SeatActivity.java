@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.film.database.DatabaseHelper;
+import com.example.film.database.Preference;
 import com.example.film.database.Reservation;
 import com.example.film.utils.DateUtilities;
 import com.harrywhewell.scrolldatepicker.DayScrollDatePicker;
@@ -158,6 +159,7 @@ public class SeatActivity extends AppCompatActivity {
             Reservation reservation = new Reservation();
             reservation.setSeat(seatAdapter.getSelectedSeats());
             reservation.setMovieId(id);
+            reservation.setUserId(Preference.getLoginUser(getApplicationContext()));
             reservation.setDate(DateUtilities.dateToString(date));
             reservation.setTime(time);
             databaseHelper.insertOrUpdateReservation(reservation);

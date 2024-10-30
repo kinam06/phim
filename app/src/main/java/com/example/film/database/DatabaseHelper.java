@@ -140,6 +140,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public void deleteUser(long id) {
+        if (id < 0) {
+            return;
+        }
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete(User.TABLE_NAME, User.USER_ID + "=?", new String[]{String.valueOf(id)});
+    }
+
     public User getUser(String username) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
