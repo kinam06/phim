@@ -11,7 +11,7 @@ public class Movie {
     private String director;
     private String actor;
     private int duration;
-    private Long releaseDate;
+    private String releaseDate;
 
     public static final String TABLE_NAME = "movies";
     public static final String MOVIE_ID = "id";
@@ -38,7 +38,7 @@ public class Movie {
             + RELEASE + " INTEGER"
             + ")";
 
-    public Movie(String name, String image, String description, String country, String genre, String director, String actor, int duration, Long releaseDate) {
+    public Movie(String name, String image, String description, String country, String genre, String director, String actor, int duration, String releaseDate) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -50,7 +50,7 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    public Movie(Integer id, String name, String image, String description, String country, String genre, String director, String actor, int duration, Long releaseDate) {
+    public Movie(Integer id, String name, String image, String description, String country, String genre, String director, String actor, int duration, String releaseDate) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -135,11 +135,11 @@ public class Movie {
         this.duration = duration;
     }
 
-    public Long getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Long releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 }

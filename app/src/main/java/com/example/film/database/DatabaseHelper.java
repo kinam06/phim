@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.film.utils.DateUtilities;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     static final String DB_NAME = "FILM.DB";
     private Context context;
+    private final Gson gson = new Gson();
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, 1);
@@ -31,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(User.CREATE_TABLE);
         db.execSQL(Movie.CREATE_TABLE);
+        db.execSQL(Reservation.CREATE_TABLE);
         initMovieData(db);
     }
 
@@ -46,19 +52,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "Victor Vũ",
                     "Trần Nghĩa, Trúc Anh, Thảo Tâm, Trần Phong, Khánh Vân,...",
                     114,
-                    0L
+                    DateUtilities.dateToString(DateUtilities.createDate(20, 12, 2019))
             );
             String pathRom = createFileFromAssets("rom.png");
             Movie rom = new Movie(
                     "MẮT BIẾC",
                     pathRom,
-                    "Mắt Biếc được chuyển thể từ cuốn tiểu thuyết cùng tên của nhà văn Nguyễn Nhật Ánh, kể dưới góc nhìn của Ngạn - một chàng trai sinh ra và lớn lên trong ngôi làng Đo Đo nghèo khó, đem lòng yêu một cô gái xinh đẹp với đôi mắt biếc của Đo Đo suốt nửa đời người.",
+                    "Bộ phim lấy bối cảnh một khu chung cư cũ kỹ của người lao động nghèo Sài Gòn, xoay quanh câu chuyện số đề, một loại hình cá cược phi pháp dựa trên kết quả xổ số kiến thiết của nhà nước. Người chơi sẽ cố gắng dự đoán 2 con số cuối giải đặc biệt kết quả xổ số mỗi ngày vào buổi chiều muộn. Ròm và đám trẻ bụi đời kiếm sống bằng nghề bán vé dò xổ số kiêm luôn nghề “cò” ghi số đề. Chúng sống nhờ tình thương của những người thắng đề khi đoán đúng, rồi bị mắng mỏ thậm chí còn bị đánh đập nếu kết quả dự đoán sai.",
                     "Việt Nam",
-                    "Chính kịch, lãng mạng",
-                    "Victor Vũ",
-                    "Trần Nghĩa, Trúc Anh, Thảo Tâm, Trần Phong, Khánh Vân,...",
-                    114,
-                    0L
+                    "Tâm lí xã hội, tội phạm",
+                    "Trần Thanh Huy",
+                    "Trần Anh Khoa, Nguyễn Phan Anh, Wowy, Cát Phượng,....",
+                    79,
+                    DateUtilities.dateToString(DateUtilities.createDate(20, 9, 2020))
             );
             insertMovie(db, matBiec);
             insertMovie(db, rom);
@@ -191,7 +197,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Movie getMovie(int id) {
-        // get readable database as we are not inserting anything
+        if (id == -1){
+            return null;
+        }
+            // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Movie.TABLE_NAME,
@@ -218,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // prepare note object
         @SuppressLint("Range")
-        Movie user = new Movie(
+        Movie movie = new Movie(
                 cursor.getInt(cursor.getColumnIndex(Movie.MOVIE_ID)),
                 cursor.getString(cursor.getColumnIndex(Movie.NAME)),
                 cursor.getString(cursor.getColumnIndex(Movie.IMAGE)),
@@ -228,16 +237,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(Movie.DIRECTOR)),
                 cursor.getString(cursor.getColumnIndex(Movie.ACTOR)),
                 cursor.getInt(cursor.getColumnIndex(Movie.DURATION)),
-                cursor.getLong(cursor.getColumnIndex(Movie.RELEASE))
+                cursor.getString(cursor.getColumnIndex(Movie.RELEASE))
         );
 
         // close the db connection
         cursor.close();
 
-        return user;
+        return movie;
     }
 
-    public List<Movie> getRandomMovie() {
+    public List<Movie> getRandomMovies() {
         List<Movie> movies = new ArrayList<>();
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
@@ -276,7 +285,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(Movie.DIRECTOR)),
                         cursor.getString(cursor.getColumnIndex(Movie.ACTOR)),
                         cursor.getInt(cursor.getColumnIndex(Movie.DURATION)),
-                        cursor.getLong(cursor.getColumnIndex(Movie.RELEASE))
+                        cursor.getString(cursor.getColumnIndex(Movie.RELEASE))
                 );
                 movies.add(movie);
             } while (cursor.moveToNext());
@@ -327,7 +336,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(Movie.DIRECTOR)),
                         cursor.getString(cursor.getColumnIndex(Movie.ACTOR)),
                         cursor.getInt(cursor.getColumnIndex(Movie.DURATION)),
-                        cursor.getLong(cursor.getColumnIndex(Movie.RELEASE))
+                        cursor.getString(cursor.getColumnIndex(Movie.RELEASE))
                 );
                 movies.add(movie);
             } while (cursor.moveToNext());
@@ -337,5 +346,84 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return movies;
+    }
+
+    public long insertOrUpdateReservation(Reservation reservation) {
+        Reservation dbReservation = getReservation(reservation.getDate(), reservation.getTime(), reservation.getMovieId());
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        if (dbReservation == null) {
+
+            values.put(Reservation.MOVIE_ID, reservation.getMovieId());
+            values.put(Reservation.DATE, reservation.getDate());
+            values.put(Reservation.TIME, reservation.getTime());
+            values.put(Reservation.SEAT, gson.toJson(reservation.getSeat()));
+
+            // insert row
+            long id = db.insert(Reservation.TABLE_NAME, null, values);
+
+            // close db connection
+            db.close();
+
+            // return newly inserted row id
+            return id;
+        } else {
+            values.put(Reservation.RESERVATION_ID, dbReservation.getId());
+            values.put(Reservation.MOVIE_ID, dbReservation.getMovieId());
+            values.put(Reservation.DATE, dbReservation.getDate());
+            values.put(Reservation.TIME, dbReservation.getTime());
+            dbReservation.getSeat().addAll(reservation.getSeat());
+            values.put(Reservation.SEAT, gson.toJson(dbReservation.getSeat()));
+            long id = db.update(
+                    Reservation.TABLE_NAME,
+                    values,
+                    Reservation.RESERVATION_ID + "=?",
+                    new String[]{String.valueOf(dbReservation.getId())}
+            );
+            db.close();
+            return id;
+        }
+
+    }
+
+    @SuppressLint("Range")
+    public Reservation getReservation(String date, String time, int movieId) {
+        // get readable database as we are not inserting anything
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Reservation.TABLE_NAME,
+                new String[]{
+                        Reservation.RESERVATION_ID,
+                        Reservation.MOVIE_ID,
+                        Reservation.DATE,
+                        Reservation.TIME,
+                        Reservation.SEAT
+                },
+                Reservation.DATE + "=?" + " AND " + Reservation.TIME + "=?" + " AND " + Reservation.MOVIE_ID + "=?",
+                new String[]{date, time, String.valueOf(movieId)}, null, null, null, null);
+
+        if (cursor == null || cursor.getCount() == 0) {
+            return null;
+        }
+
+        cursor.moveToFirst();
+
+
+        String seat = cursor.getString(cursor.getColumnIndex(Reservation.SEAT));
+        List<Integer> seats = gson.fromJson(seat, new TypeToken<List<Integer>>() {
+        }.getType());
+
+        Reservation reservation = new Reservation(
+                cursor.getInt(cursor.getColumnIndex(Reservation.RESERVATION_ID)),
+                cursor.getInt(cursor.getColumnIndex(Reservation.MOVIE_ID)),
+                cursor.getString(cursor.getColumnIndex(Reservation.DATE)),
+                cursor.getString(cursor.getColumnIndex(Reservation.TIME)),
+                seats
+        );
+
+        // close the db connection
+        cursor.close();
+
+        return reservation;
     }
 }

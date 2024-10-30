@@ -5,49 +5,82 @@ import android.graphics.Bitmap;
 import java.util.List;
 
 public class Reservation {
-    private Movie film;
-    private String startTime;
-    private List<Integer> places;
-    private Bitmap codeQR;
 
-    public Reservation() {}
+    public static final String TABLE_NAME = "reservation";
+    public static final String RESERVATION_ID = "id";
+    public static final String MOVIE_ID = "movie_id";
+    public static final String DATE = "date";
+    public static final String TIME = "time";
+    public static final String SEAT = "seat";
+    public static final String CREATE_TABLE = "CREATE TABLE "
+            + TABLE_NAME + "("
+            + RESERVATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + MOVIE_ID + " INTEGER,"
+            + DATE + " TEXT,"
+            + TIME + " TEXT,"
+            + SEAT + " TEXT"
+            + ")";
+    private Integer id;
+    private Integer movieId;
+    private String date;
+    private String time;
+    private List<Integer> seat;
 
-    public Reservation(Movie film, String startTime, List<Integer> places, Bitmap codeQR) {
-        this.film = film;
-        this.startTime = startTime;
-        this.places = places;
-        this.codeQR = codeQR;
+    public Reservation() {
     }
 
-    public Movie getFilm() {
-        return film;
+    public Reservation(Integer id, Integer movieId, String date, String time, List<Integer> seat) {
+        this.id = id;
+        this.movieId = movieId;
+        this.date = date;
+        this.time = time;
+        this.seat = seat;
     }
 
-    public void setFilm(Movie film) {
-        this.film = film;
+    public Reservation(Integer movieId, String date, String time, List<Integer> seat) {
+        this.movieId = movieId;
+        this.date = date;
+        this.time = time;
+        this.seat = seat;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public Integer getId() {
+        return id;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public List<Integer> getPlaces() {
-        return places;
+    public Integer getMovieId() {
+        return movieId;
     }
 
-    public void setPlaces(List<Integer> places) {
-        this.places = places;
+    public void setMovieId(Integer movieId) {
+        this.movieId = movieId;
     }
 
-    public Bitmap getCodeQR() {
-        return codeQR;
+    public String getDate() {
+        return date;
     }
 
-    public void setCodeQR(Bitmap codeQR) {
-        this.codeQR = codeQR;
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public List<Integer> getSeat() {
+        return seat;
+    }
+
+    public void setSeat(List<Integer> seat) {
+        this.seat = seat;
     }
 }

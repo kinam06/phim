@@ -17,7 +17,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.film.R;
 import com.example.film.database.DatabaseHelper;
 import com.example.film.database.Movie;
 
@@ -66,7 +65,7 @@ public class FilmActivity extends AppCompatActivity {
         buyTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FilmActivity.this, TicketActivity.class);
+                Intent intent = new Intent(FilmActivity.this, SeatActivity.class);
                 intent.putExtra("id", id);
                 startActivity(intent);
             }

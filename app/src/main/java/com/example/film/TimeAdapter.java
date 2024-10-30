@@ -62,9 +62,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeAdapterVH>
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (TimeSelection timeSelection : list) {
-                    timeSelection.setSelected(false);
-                }
+                clearSelected(false);
                 list.get(pos).setSelected(true);
                 notifyDataSetChanged();
                 listener.onTimeCLick(selection.getTime());
@@ -75,6 +73,15 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeAdapterVH>
     @Override
     public int getItemCount() {
         return Const.availableTime.size();
+    }
+
+    public void clearSelected(boolean notify) {
+        for (TimeSelection timeSelection : list) {
+            timeSelection.setSelected(false);
+        }
+        if (notify){
+            notifyDataSetChanged();
+        }
     }
 
     public static class TimeAdapterVH extends RecyclerView.ViewHolder {

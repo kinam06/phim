@@ -41,5 +41,5 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.smarteist/autoimageslider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'com.github.jhonnyx2012:horizontal-picker:1.0.6'
-
+    implementation 'com.github.gastricspark:scrolldatepicker:0.0.1'
 }

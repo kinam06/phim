@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.film.database.DatabaseHelper;
 import com.example.film.database.ItemClickListener;
 import com.example.film.database.Movie;
-import com.example.film.database.User;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
@@ -47,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
         SliderAdapterMovie adapterTop = new SliderAdapterMovie(this, itemClickListener);
         SliderAdapterMovie adapterUpcoming = new SliderAdapterMovie(this, itemClickListener);
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        adapterRandom.renewItems(databaseHelper.getRandomMovie());
+        adapterRandom.renewItems(databaseHelper.getRandomMovies());
         adapterTop.renewItems(databaseHelper.getTopMovie());
-        adapterUpcoming.renewItems(databaseHelper.getRandomMovie());
+        adapterUpcoming.renewItems(databaseHelper.getRandomMovies());
 
         sliderViewRandom.setSliderAdapter(adapterRandom);
         sliderViewTop.setSliderAdapter(adapterTop);
