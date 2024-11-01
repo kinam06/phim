@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import com.example.film.admin.AdminActivity;
 import com.example.film.database.DatabaseHelper;
 import com.example.film.database.Preference;
 import com.example.film.database.User;
@@ -66,10 +64,6 @@ public class SignInActivity extends AppCompatActivity {
         String password = editTextPassword.getText().toString();
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(getApplicationContext(), "TÊN ĐĂNG NHẬP VÀ MẬT KHẨU KHÔNG ĐƯỢC ĐỂ TRỐNG", Toast.LENGTH_LONG).show();
-        }
-        if (username.equals("admin") && password.equals("admin")) {
-            startActivity(new Intent(this, AdminActivity.class));
-            return;
         }
         try {
             DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());

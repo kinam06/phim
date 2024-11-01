@@ -13,36 +13,6 @@
         android:theme="@style/Theme.Film"
         tools:targetApi="31">
         <activity
-            android:name=".admin.AddUserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewTicketActivity"
-            android:exported="false" />
-        <activity
-            android:name=".admin.EditMovieActivity"
-            android:exported="false" />
-        <activity
-            android:name=".admin.ManageMovieActivity"
-            android:exported="false" />
-        <activity
-            android:name=".admin.ManageUserActivity"
-            android:exported="false" />
-        <activity
-            android:name=".admin.AdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PaymentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SeatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MovieActivity"
-            android:exported="false" />
-        <activity
             android:name=".BeginActivity"
             android:exported="true">
             <intent-filter>

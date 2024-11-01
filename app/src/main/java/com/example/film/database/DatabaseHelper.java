@@ -36,7 +36,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(User.CREATE_TABLE);
         db.execSQL(Movie.CREATE_TABLE);
-        db.execSQL(Reservation.CREATE_TABLE);
         initMovieData(db);
     }
 
@@ -498,88 +497,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return movies;
-    }
-
-    public long insertOrUpdateReservation(Reservation reservation) {
-        Reservation dbReservation = getReservation(reservation.getDate(), reservation.getTime(), reservation.getMovieId());
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        if (dbReservation == null) {
-
-            values.put(Reservation.MOVIE_ID, reservation.getMovieId());
-            values.put(Reservation.USER_ID, reservation.getUserId());
-            values.put(Reservation.DATE, reservation.getDate());
-            values.put(Reservation.TIME, reservation.getTime());
-            values.put(Reservation.SEAT, gson.toJson(reservation.getSeat()));
-
-            // insert row
-            long id = db.insert(Reservation.TABLE_NAME, null, values);
-
-            // close db connection
-            db.close();
-
-            // return newly inserted row id
-            return id;
-        } else {
-            values.put(Reservation.RESERVATION_ID, dbReservation.getId());
-            values.put(Reservation.MOVIE_ID, dbReservation.getMovieId());
-            values.put(Reservation.USER_ID, dbReservation.getUserId());
-            values.put(Reservation.DATE, dbReservation.getDate());
-            values.put(Reservation.TIME, dbReservation.getTime());
-            dbReservation.getSeat().addAll(reservation.getSeat());
-            values.put(Reservation.SEAT, gson.toJson(dbReservation.getSeat()));
-            long id = db.update(
-                    Reservation.TABLE_NAME,
-                    values,
-                    Reservation.RESERVATION_ID + "=?",
-                    new String[]{String.valueOf(dbReservation.getId())}
-            );
-            db.close();
-            return id;
-        }
-
-    }
-
-    @SuppressLint("Range")
-    public Reservation getReservation(String date, String time, int movieId) {
-        // get readable database as we are not inserting anything
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(Reservation.TABLE_NAME,
-                new String[]{
-                        Reservation.RESERVATION_ID,
-                        Reservation.MOVIE_ID,
-                        Reservation.USER_ID,
-                        Reservation.DATE,
-                        Reservation.TIME,
-                        Reservation.SEAT
-                },
-                Reservation.DATE + "=?" + " AND " + Reservation.TIME + "=?" + " AND " + Reservation.MOVIE_ID + "=?",
-                new String[]{date, time, String.valueOf(movieId)}, null, null, null, null);
-
-        if (cursor == null || cursor.getCount() == 0) {
-            return null;
-        }
-
-        cursor.moveToFirst();
-
-
-        String seat = cursor.getString(cursor.getColumnIndex(Reservation.SEAT));
-        List<Integer> seats = gson.fromJson(seat, new TypeToken<List<Integer>>() {
-        }.getType());
-
-        Reservation reservation = new Reservation(
-                cursor.getInt(cursor.getColumnIndex(Reservation.RESERVATION_ID)),
-                cursor.getInt(cursor.getColumnIndex(Reservation.MOVIE_ID)),
-                cursor.getInt(cursor.getColumnIndex(Reservation.USER_ID)),
-                cursor.getString(cursor.getColumnIndex(Reservation.DATE)),
-                cursor.getString(cursor.getColumnIndex(Reservation.TIME)),
-                seats
-        );
-
-        // close the db connection
-        cursor.close();
-
-        return reservation;
     }
 }

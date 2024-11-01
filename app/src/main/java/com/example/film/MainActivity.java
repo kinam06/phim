@@ -32,12 +32,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         EditText search = findViewById(R.id.search);
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SearchActivity.class));
-            }
-        });
         SliderView sliderViewRandom = findViewById(R.id.imageSliderRandomMovies);
         SliderView sliderViewTop = findViewById(R.id.imageSliderTopMovies);
         SliderView sliderViewUpcoming = findViewById(R.id.imageSliderUpcoming);
@@ -73,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private final ItemClickListener itemClickListener = new ItemClickListener() {
         @Override
         public void onMovieClick(Movie movie) {
-            Intent intent = new Intent(MainActivity.this, MovieActivity.class);
-            intent.putExtra("id", movie.getId());
-            startActivity(intent);
+
         }
     };
 }
