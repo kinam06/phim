@@ -51,7 +51,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.SeatAdapterVH>
                 DatabaseHelper databaseHelper = new DatabaseHelper(context);
                 databaseHelper.deleteUser(user.getId());
                 list.remove(user);
-                notifyItemChanged(position);
+                notifyDataSetChanged();
             }
         });
     }

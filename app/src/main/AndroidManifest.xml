@@ -16,9 +16,6 @@
             android:name=".admin.AddUserActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewTicketActivity"
-            android:exported="false" />
-        <activity
             android:name=".admin.EditMovieActivity"
             android:exported="false" />
         <activity
@@ -29,37 +26,13 @@
             android:exported="false" />
         <activity
             android:name=".admin.AdminActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PaymentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SeatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MovieActivity"
-            android:exported="false" />
-        <activity
-            android:name=".BeginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignInActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
     </application>
 
 </manifest>
